@@ -1,4 +1,5 @@
-FROM php:7.0-apache
+ARG PHP_DOCKER_TAG=7.0-apache
+FROM php:${PHP_DOCKER_TAG}
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -9,7 +10,6 @@ RUN set -ex; \
 	apt-get install -y --no-install-recommends \
 		libjpeg-dev \
 		libpng-dev \
-		git \
 	; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
@@ -18,6 +18,9 @@ RUN set -ex; \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark; \
+	apt-get install -y \
+		git \
+    ; \
 	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
 		| awk '/=>/ { print $3 }' \
 		| sort -u \
@@ -44,17 +47,9 @@ RUN a2enmod rewrite expires
 
 VOLUME /var/www/html/sites
 
-# ENV LIBREHEALTH_VERSION master
-ENV LIBREHEALTH_VERSION b016168
-ENV LIBREHEALTH_SHA1 42836be4f7c0b8803440d6165246d172a2952c2c
-
 RUN set -ex; \
-	curl -o librehealth.tar.gz -fSL "https://github.com/LibreHealthIO/lh-ehr/archive/${LIBREHEALTH_VERSION}.tar.gz"; \
-	echo "${LIBREHEALTH_SHA1} *librehealth.tar.gz" | sha1sum -c -; \
-# upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
-	tar -xzf librehealth.tar.gz -C /usr/src/; \
-	rm librehealth.tar.gz; \
-	mv /usr/src/lh-ehr-${LIBREHEALTH_VERSION}* /usr/src/librehealth; \
+	cd /usr/src; \
+    git clone --depth=1 https://github.com/LibreHealthIO/lh-ehr.git librehealth; \
 	chown -R www-data:www-data /usr/src/librehealth
 
 COPY docker-entrypoint.sh /usr/local/bin/

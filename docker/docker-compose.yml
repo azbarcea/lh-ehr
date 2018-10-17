@@ -15,7 +15,7 @@ services:
    librehealth:
      depends_on:
        - db
-     image: librehealth:${LIBREHEALTH_VERSION}
+     image: librehealth:${PHP_DOCKER_VERSION}-apache
      ports:
        - "8000:80"
      restart: always
