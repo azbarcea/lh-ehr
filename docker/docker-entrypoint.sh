@@ -52,7 +52,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			--directory /usr/src/librehealth \
 			--owner "$user" --group "$group" \
 			. | tar --extract --file -
-		echo >&2 "Complete! LibreHealth has been successfully copied to $PWD"
+		echo >&2 "Complete! LibreHealth EHR has been successfully copied to $PWD"
 		if [ ! -e .htaccess ]; then
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
 			cat > .htaccess <<-'EOF'
