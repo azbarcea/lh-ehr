@@ -50,6 +50,7 @@ RUN set -ex; \
 	cd /var/www; \
 	rm -fr html; \
 	git clone --depth=1 https://github.com/LibreHealthIO/lh-ehr.git html; \
+	rm -fr html/.git; \
 	chown -R www-data:www-data /var/www/html
 
 VOLUME /var/www/html/sites

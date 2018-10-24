@@ -40,35 +40,21 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		group="$(id -g)"
 	fi
 
-	if [ ! -e index.php ] && [ ! -e version.php ]; then
-		echo >&2 "LibreHealth not found in $PWD - copying now..."
-		if [ "$(ls -A)" ]; then
-			echo >&2 "WARNING: $PWD is not empty - press Ctrl+C now if this is an error!"
-			( set -x; ls -A; sleep 10 )
-		fi
-		tar --create \
-			--file - \
-			--one-file-system \
-			--directory /usr/src/librehealth \
-			--owner "$user" --group "$group" \
-			. | tar --extract --file -
-		echo >&2 "Complete! LibreHealth EHR has been successfully copied to $PWD"
-		if [ ! -e .htaccess ]; then
-			# NOTE: The "Indexes" option is disabled in the php:apache base image
-			cat > .htaccess <<-'EOF'
-				# BEGIN LibreHealth
-				<IfModule mod_rewrite.c>
+	if [ ! -e .htaccess ]; then
+		# NOTE: The "Indexes" option is disabled in the php:apache base image
+		cat > .htaccess <<-'EOF'
+			# BEGIN LibreHealth
+			<IfModule mod_rewrite.c>
 				RewriteEngine On
 				RewriteBase /
 				RewriteRule ^index\.php$ - [L]
 				RewriteCond %{REQUEST_FILENAME} !-f
 				RewriteCond %{REQUEST_FILENAME} !-d
 				RewriteRule . /index.php [L]
-				</IfModule>
-				# END LibreHealth
-			EOF
-			chown "$user:$group" .htaccess
-		fi
+			</IfModule>
+			# END LibreHealth
+		EOF
+		chown "$user:$group" .htaccess
 	fi
 
 	envs=(
