@@ -45,12 +45,14 @@ RUN { \
 
 RUN a2enmod rewrite expires
 
-VOLUME /var/www/html/sites
-
+# Installing latest LibreHealth EHR (master)
 RUN set -ex; \
-	cd /usr/src; \
-    git clone --depth=1 https://github.com/LibreHealthIO/lh-ehr.git librehealth; \
-	chown -R www-data:www-data /usr/src/librehealth
+	cd /var/www; \
+	rm -fr html; \
+	git clone --depth=1 https://github.com/LibreHealthIO/lh-ehr.git html; \
+	chown -R www-data:www-data /var/www/html
+
+VOLUME /var/www/html/sites
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
