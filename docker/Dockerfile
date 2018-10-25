@@ -20,6 +20,7 @@ RUN set -ex; \
 	apt-mark manual $savedAptMark; \
 	apt-get install -y \
 		git \
+		mariadb-client \
     ; \
 	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
 		| awk '/=>/ { print $3 }' \

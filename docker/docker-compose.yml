@@ -19,7 +19,8 @@ services:
        - "8000:80"
      restart: always
      environment:
-       LIBREHEALTH_DB_HOST: db:3306
+       LIBREHEALTH_DB_HOST: db
+       LIBREHEALTH_DB_PORT: 3306
        LIBREHEALTH_DB_NAME: libreehr
        LIBREHEALTH_DB_USER: libreehr
        LIBREHEALTH_DB_PASSWORD: s3cret
