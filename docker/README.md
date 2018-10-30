@@ -12,14 +12,8 @@ To start a simple `lh-ehr` instance, follow the steps:
 
 Build using your desired `php` version, by picking from the following: `php7.0-apache`, **`php7.1-apache`** (default), `php7.2-apache` (more: [hub.docker:_/php](https://hub.docker.com/_/php/)). Currently only *-apache* (a.k.a [Apache HTTP Server](https://httpd.apache.org/)) is supported.
 
-    $ export PHP_DOCKER_VERSION=php7.1
-    $ cd lh-ehr/docker
-    $ docker build --no-cache -t librehealth_ehr:${PHP_DOCKER_VERSION}-apache .
-    $ docker-compose up -p librehealth -d
-
-### 3. Start LibreHealth EHR composition
-
-    $ docker-compose up -p librehealth -d
+    $ cp .env.mysql.example .env.mysql ; cp .env.ehr.example .env.ehr
+    $ docker-compose -p librehealth up -d
 
 Go to [http://localhost:8000/setup.php](http://localhost:8000/setup.php). At this point the default image will guide you throught the installation steps.
 
@@ -89,10 +83,8 @@ Login with credentials provided above:
 
 ## Backup (make use of volumes)
 
-The volume that needs to be backed up: `librehealth_db_data`
+The volumes that needs to be backed up: `librehealth_db_data` and `librehealth_sites`
 
     $ docker volume ls | grep librehealth
     local               librehealth_db_data
-
-
-
+    local               librehealth_sites
