@@ -17,7 +17,7 @@ Build using your desired `php` version, by picking from the following: `php7.0-a
     $ docker build --no-cache -t librehealth_ehr:${PHP_DOCKER_VERSION}-apache .
     $ docker-compose up -p librehealth -d
 
-### 3. Start LibreHealth composition
+### 3. Start LibreHealth EHR composition
 
     $ docker-compose up -p librehealth -d
 
